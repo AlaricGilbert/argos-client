@@ -1,0 +1,82 @@
+﻿<Page x:Class="Argos.Views.QueryByTimePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Argos.Views"
+      xmlns:vm="clr-namespace:Argos.ViewModels"
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="1200"
+      d:DataContext="{d:DesignInstance Type=vm:QueryByTimePageViewModel, IsDesignTimeCreatable=False}"
+      Title="QueryByTimePage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="20,20,20,20">
+            <StackPanel>
+                <ui:RadioButtons MaxColumns="2" Header="估计器选择" Margin="0,10,0,10" SelectedIndex="{Binding SelectedIndex}">
+                    <RadioButton Content="首时间戳估计(First Timestamp Estimator)" Tag="FTE" FontFamily="Consolas,Microsoft YaHei UI" />
+                    <RadioButton Content="报告中心估计(Report Center Estimator)" Tag="RCE"  Margin="8,0" FontFamily="Consolas,Microsoft YaHei UI"/>
+                </ui:RadioButtons>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                <CheckBox Content="指定时间段：" IsChecked="{Binding WithTime, Mode=TwoWay}"/>
+                <DatePicker ui:ControlHelper.PlaceholderText="选择起始时间" Margin="30,0,30,0" SelectedDate="{Binding StartTime, Mode=TwoWay}" IsEnabled="{Binding WithTime}"/>
+                
+                <TextBlock Text="~" VerticalAlignment="Center"/>
+                <DatePicker ui:ControlHelper.PlaceholderText="选择结束时间" Margin="30,0,30,0" SelectedDate="{Binding EndTime, Mode=TwoWay}" IsEnabled="{Binding WithTime}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                <CheckBox Content="指定协议：" IsChecked="{Binding WithProtocol, Mode=TwoWay}"/>
+                <TextBox Margin="10,0,10,0" Width="200" Text="{Binding Protocol, Mode=TwoWay}" IsEnabled="{Binding WithProtocol}"/>
+
+                <Button Content="查询" Margin="100,0,0,0" Command="{Binding QueryCommand}"/>
+                <Button Content="下一页" Margin="100,0,0,0" Command="{Binding QueryNextCommand}" IsEnabled="{Binding CanNextPage}"/>
+            </StackPanel>
+            
+
+        </StackPanel>
+
+        <DataGrid Margin="20,20,20,20" Grid.Row="1"
+                      ScrollViewer.CanContentScroll="True" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      RowDetailsVisibilityMode="Collapsed"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                      ItemsSource="{Binding Records}"
+                      FontFamily="Consolas">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                        Header="TxID"
+                        Width="600"
+                        Binding="{Binding TxId}" />
+                <DataGridTextColumn
+                        Header="监控时间"
+                        Width="150"
+                        Binding="{Binding Time}" />
+                <DataGridTextColumn
+                        Header="监控来源"
+                        Width="150"
+                        Binding="{Binding Sniffer}" />
+                <DataGridTextColumn
+                        Header="协议"
+                        Width="100"
+                        Binding="{Binding Protocol}" />
+                <DataGridTextColumn
+                        Header="推测IP地址"
+                        Width="300"
+                        Binding="{Binding SourceIP}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

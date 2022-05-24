@@ -1,0 +1,75 @@
+﻿<Window x:Class="Argos.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:local="clr-namespace:Argos"
+        xmlns:views="clr-namespace:Argos.Views"
+        xmlns:viewmodels="clr-namespace:Argos.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Width="1500"
+        Height="750"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" 
+        ui:ThemeManager.IsThemeAware="True"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        ui:TitleBar.ExtendViewIntoTitleBar="True"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        >
+    <ui:NavigationView 
+        x:Name="navigationView" 
+        PaneDisplayMode="Left" 
+        IsSettingsVisible="False"  
+        IsBackButtonVisible="Visible" 
+        IsBackEnabled="{Binding BackEnabled}">
+        <ui:NavigationView.MenuItems>
+            <ui:NavigationViewItem Icon="World" Content="系统运行总览" Tag="Status" >
+                
+            </ui:NavigationViewItem>
+            <ui:NavigationViewItem Content="区段任务配置" Tag="TaskConfigure" >
+                <ui:NavigationViewItem.Icon>
+                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF259;"/>
+                </ui:NavigationViewItem.Icon>
+            </ui:NavigationViewItem>
+            <ui:NavigationViewItem Content="监控记录查询" Tag="Query" IsExpanded="True" >
+                <ui:NavigationViewItem.Icon>
+                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE773;"/>
+                </ui:NavigationViewItem.Icon>
+                <ui:NavigationViewItem.MenuItems>
+                    <ui:NavigationViewItem Content="时序查询" Tag="QueryByTime" >
+                        <ui:NavigationViewItem.Icon>
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC92;"/>
+                        </ui:NavigationViewItem.Icon>
+                    </ui:NavigationViewItem>
+                    <ui:NavigationViewItem Content="交易查询" Tag="QueryByTransaction" >
+                        <ui:NavigationViewItem.Icon>
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEF3D;"/>
+                        </ui:NavigationViewItem.Icon>
+                    </ui:NavigationViewItem>
+                    <ui:NavigationViewItem Content="地址查询" Tag="QueryByAddress" >
+                        <ui:NavigationViewItem.Icon>
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8AF;"/>
+                        </ui:NavigationViewItem.Icon>
+                    </ui:NavigationViewItem>
+                </ui:NavigationViewItem.MenuItems>
+            </ui:NavigationViewItem>
+        </ui:NavigationView.MenuItems>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="BackRequested">
+                <i:InvokeCommandAction Command="{Binding GoBackCommand}" />
+            </i:EventTrigger>
+            <i:EventTrigger EventName="SelectionChanged">
+                <i:InvokeCommandAction Command="{Binding NavigateCommand}" PassEventArgsToCommand="True"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Frame x:Name="contentFrame" NavigationUIVisibility="Hidden" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Navigated">
+                    <i:InvokeCommandAction Command="{Binding NavigatedCommand}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Frame>
+    </ui:NavigationView>
+</Window>
